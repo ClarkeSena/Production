@@ -23,7 +23,7 @@ physics: {
       # VDResamplerDir : "" # defaulted empty, i.e. placing in the current working directory
       # fclDir : "" # defaulted empty
       trainingPlanFile : "Offline/STMMC/fcl/VDResamplerTrainingPlan.fcl"
-      dataSourceTag : MuBeam # EleBeam, MuBeam, TargetStops1809, or Neutrals
+      dataSourceTag : MuBeam # EleBeam, MuBeam, TargetStops1809, Neutrals, TargetStops347, or TargetStops844
       trainingThreshold : 100
       doROOTDump: true
     }
@@ -34,5 +34,6 @@ physics: {
 
 # if allows ROOTDump, specify output file name
 # for consistency, recommended name being "nts.mu2e.STMVDResamplerConfigure_VD<id>_hitDump.<ver>.<run6>_<src8>.root"
-# src8 is the 8-digit encoding of the data source, e.g. 00000000 for EleBeam, 00000001 for MuBeam, 00000002 for TargetStops1809, and 00000003 for Neutrals
+# src8 is the 8-digit encoding of the data source, e.g. 00000000 for EleBeam, 00000001 for MuBeam, 00000002 for TargetStops1809, 00000003 for Neutrals,
+# 00000004 for TargetStops347, and 00000005 for TargetStops844
 services.TFileService.fileName : @nil

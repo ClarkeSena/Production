@@ -1,0 +1,45 @@
+# Generate and propagate 843.8 keV gammas (27Al(mu-,nu)27Mg, then 27Mg beta decay to 27Al*) from
+# muon target stops to VD101 and VD116 for STM studies. Same chain as BeamTo2VD1809.fcl
+# (TargetStopsCat -> Pileup -> G4 from the photon), only the generated line differs.
+#
+# Follows capture, so it stays in captureProducts and the intensity is per CAPTURE. The 27Mg
+# lifetime (t1/2 = 9.458 min, tau = 818.7 s) is far longer than the 1695 ns micropulse, so the delay
+# is folded into one micropulse: the photon then arrives at a uniform time, i.e. a constant rate
+# uncorrelated with the bunch, instead of at t ~ 1e11 ns.
+#
+# Intensity per capture = P(27Mg | capture) x I_gamma(843.76 keV) = 0.0990(33) x 0.718(3) = 0.0711(24)
+#   P(27Mg | capture): RAL activation, arXiv:2506.08301 (NIM B 2025) and arXiv:2507.19753
+#   I_gamma, t1/2 = 9.458(12) min: NNDC/ENSDF 27Mg decay (cf. Shibata et al., ARI 49 (1998) 985)
+# Per stop this is 0.043, vs 0.040 (unsourced) in Offline StoppedMuonXRayGammaRayGun.
+#
+# KNOWN LIMITATION - SATURATED-ACTIVITY ASSUMPTION
+# Each 844 keV photon is tied to a capture in the SAME event, so the line behaves as if the 27Mg
+# activity were already at equilibrium with the beam. In reality the activity builds up from zero
+# at beam-on, A(t) = A_sat (1 - exp(-t/tau)): 50% after 9.5 min, 90% after 31 min, 99% after
+# 63 min, and decays with the same tau after beam-off. Consequences:
+#   - Any study of the first ~hour after beam-on OVERESTIMATES the 844 keV rate (by ~1000x in the
+#     first spills). Only steady running (>~1 h of beam) is represented correctly.
+#   - Per-POT normalisation places all the 844 keV photons in beam windows. The real line is
+#     constant across the spill cycle (ripple ~ cycle/tau ~ 0.2%) and the STM records off-spill
+#     too, so the in-spill rate here is too high by 1/(in-spill duty factor) and the off-spill
+#     844 keV counts are missing. Integrated counts over a full cycle are correct.
+# Accepted for now: no simulation from beam start is planned, and tracking the 27Mg population
+# window by window (or explicitly) is too expensive. Fix when needed: an activation source with a
+# per-window state N <- N exp(-dt/tau) + production, plus an analytic "time since beam-on" start
+# (N = P tau (1 - exp(-t/tau))) for snapshot jobs. The same caveat will apply to other activation
+# lines (e.g. 28Al, t1/2 = 2.24 min, 1779 keV, close to the 1809 keV signal line) if they are added.
+#include "Production/JobConfig/pileup/STM/BeamTo2VD1809.fcl"
+
+process_name: BeamTo2VD844
+
+physics.producers.generate.captureProducts : [{
+  tool_type  : MuStopGammaLineGenerator
+  energy     : 0.84376 # MeV
+  intensity  : 0.0711  # per capture
+  lifetime   : 8.187e11 # ns, 27Mg mean life (t1/2 / ln2)
+  foldPeriod : 1695.   # ns, micropulse
+}]
+physics.producers.generate.decayProducts : []
+
+outputs.compressedOutput101.fileName : "dts.owner.BeamTo2VD844_VD101.version.sequencer.art"
+outputs.compressedOutput116.fileName : "dts.owner.BeamTo2VD844_VD116.version.sequencer.art"

@@ -1,0 +1,25 @@
+# Generate and propagate 346.8 keV muonic Al 2p-1s X-rays from muon target stops to VD101 and VD116
+# for STM studies. Same chain as BeamTo2VD1809.fcl (TargetStopsCat -> Pileup -> G4 from the photon),
+# only the generated line differs.
+#
+# The X-ray comes from the atomic cascade, so it is emitted on EVERY stop (capture or decay) at the
+# stop time. It therefore goes in the Pileup stopProducts list (no muon-lifetime delay), and the
+# capture list is emptied.
+#
+# Intensity is per stopped muon: 0.798(8), energy 346.828(2) keV, from Measday, Stocki, Moftah & Tam,
+# PRC 76, 035504 (2007), as tabulated in AlCap (Edmonds et al., arXiv:2110.10228, Table I).
+# Matches the unsourced 0.798 in Offline StoppedMuonXRayGammaRayGun.
+#include "Production/JobConfig/pileup/STM/BeamTo2VD1809.fcl"
+
+process_name: BeamTo2VD347
+
+physics.producers.generate.captureProducts : []
+physics.producers.generate.decayProducts : []
+physics.producers.generate.stopProducts : [{
+  tool_type : MuStopGammaLineGenerator
+  energy    : 0.346828 # MeV
+  intensity : 0.798  # per stop
+}]
+
+outputs.compressedOutput101.fileName : "dts.owner.BeamTo2VD347_VD101.version.sequencer.art"
+outputs.compressedOutput116.fileName : "dts.owner.BeamTo2VD347_VD116.version.sequencer.art"

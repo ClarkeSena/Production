@@ -45,6 +45,10 @@ STMPileup: {
         "/cvmfs/mu2e.opensciencegrid.org/DataFiles/OfflineData/STMVDResampler/MDC2025ai/nts.yongyiwu.STMVDResamplerConfigure_VD116_hitDump.MDC2025av.001430_00000003.root"  # Neutrals
       ] # list of root files containing raw data, same order as hitSummaryFiles. needed for SBDMstage1Method != DIFFUSION, specified in hitSummaryFiles
       # resamplerSourceTreeNames : "VDResamplerTrainingSetup/ttree" # default
+      # TargetStops347 / TargetStops844 (BeamTo2VD347.fcl / BeamTo2VD844.fcl) are not mixed in yet:
+      # once their models are trained, append one entry per source to hitSummaryFiles, potsPerFile
+      # and resamplerSourceRootFiles (src8 = 00000004 / 00000005), add the models to the catalog,
+      # and remove the same lines from the MuBeam training sample so they are not counted twice.
       # useSummaryFile : [true, true, true, true] # optional, default to all true, if false, the corresponding hitSummaryFiles entry will be skipped
       useHeun : true
       useSDE : true
