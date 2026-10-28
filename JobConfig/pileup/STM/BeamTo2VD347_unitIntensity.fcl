@@ -1,0 +1,18 @@
+# Unit-intensity version of BeamTo2VD347.fcl for training-sample production: a 346.828 keV photon
+# on EVERY muon stop instead of 0.798 per stop. Same physics otherwise (energy, prompt emission,
+# geometry); only the rate per stop is changed, so the VD116 distribution is unchanged and the
+# sample simply has 1/0.798 = 1.25x more photons per event.
+#
+# NORMALISATION: this sample over-represents the line by 1/I with I = 0.798(8) per stop. When it
+# is used as a VD resampler source, enter
+#   potsPerFile = (POT equivalent of the stops used) / 0.798
+# Anything reading these files directly (not via VDResamplerGenerateMix) must weight each photon
+# by 0.798 instead.
+#include "Production/JobConfig/pileup/STM/BeamTo2VD347.fcl"
+
+process_name: BeamTo2VD347unit
+
+physics.producers.generate.stopProducts[0].intensity : 1.0
+
+outputs.compressedOutput101.fileName : "dts.owner.BeamTo2VD347unit_VD101.version.sequencer.art"
+outputs.compressedOutput116.fileName : "dts.owner.BeamTo2VD347unit_VD116.version.sequencer.art"

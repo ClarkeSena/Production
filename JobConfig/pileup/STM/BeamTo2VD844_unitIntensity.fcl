@@ -1,0 +1,19 @@
+# Unit-intensity version of BeamTo2VD844.fcl for training-sample production: an 843.76 keV photon
+# on EVERY muon capture instead of 0.0711 per capture. Same physics otherwise (energy, folded
+# 27Mg delay, geometry); only the rate per capture is changed, so the VD116 distribution is
+# unchanged and the sample has 1/0.0711 = 14x more photons per event. The saturated-activity
+# limitation documented in BeamTo2VD844.fcl applies unchanged.
+#
+# NORMALISATION: this sample over-represents the line by 1/I with I = 0.0711(24) per capture. When
+# it is used as a VD resampler source, enter
+#   potsPerFile = (POT equivalent of the stops used) / 0.0711
+# Anything reading these files directly (not via VDResamplerGenerateMix) must weight each photon
+# by 0.0711 instead.
+#include "Production/JobConfig/pileup/STM/BeamTo2VD844.fcl"
+
+process_name: BeamTo2VD844unit
+
+physics.producers.generate.captureProducts[0].intensity : 1.0
+
+outputs.compressedOutput101.fileName : "dts.owner.BeamTo2VD844unit_VD101.version.sequencer.art"
+outputs.compressedOutput116.fileName : "dts.owner.BeamTo2VD844unit_VD116.version.sequencer.art"
