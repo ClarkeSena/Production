@@ -173,6 +173,7 @@ STMPileup: {
 STMG4Cuts: {
   AlXRay : {
     type           : creationLine
+    label          : "AlXRay"
     pdgId          : 22
     process        : "muMinusCaptureAtRest"
     model          : "EMCascade"
@@ -182,6 +183,33 @@ STMG4Cuts: {
     reportRange    : [ 0.300, 0.370 ] # MeV
     reportMinCount : 5
   }
+  # Mg27Capture: 27Mg nuclei created by muon capture (muMinusCaptureAtRest), killed at creation so they never
+  # decay. Removes Geant4's 27Mg beta decay to 27Al: the 843.746 keV line (71.8% per decay; replaced by the dedicated
+  # TargetStops844 source, BeamTo2VD844.fcl), the 1014.5 keV line (28.2%) and the beta electron (neither replaced).
+  # 27Mg made by neutrons (27Al(n,p), 26Mg(n,g)) is kept. Radioactive decay is active in ShieldingM even with
+  # turnOnRadioactiveDecay false. pdgIds: 27Mg ground state, and Geant4's code for an excited 27Mg (level digit 9).
+  Mg27Capture : {
+    type      : creationLine
+    label     : "Mg27Capture"
+    pdgIds    : [ 1000120270, 1000120279 ]
+    process   : "muMinusCaptureAtRest"
+    model     : ""
+    energies  : [ 1000.0 ] # MeV: with the tolerance, any kinetic energy 0 - 2 GeV (selection is by process only)
+    tolerance : 1000.0
+    doNotCut  : false
+  }
 }
+
+# Watch-only (doNotCut) cuts to size the 844 removal: 27Mg nuclei counted by the process that created them, and the
+# 843.746 keV decay photons (what cutting every decay photon would remove). Used by BeamTo2VD_Mg27Report.fcl.
+STMG4CutsMg27Report : [
+  { @table::STMG4Cuts.Mg27Capture  label : "Mg27 all processes"  process : ""                 doNotCut : true },
+  { @table::STMG4Cuts.Mg27Capture  label : "Mg27 muon capture"                                 doNotCut : true },
+  { @table::STMG4Cuts.Mg27Capture  label : "Mg27 neutronInelastic" process : "neutronInelastic" doNotCut : true },
+  { @table::STMG4Cuts.Mg27Capture  label : "Mg27 nCapture"       process : "nCapture"         doNotCut : true },
+  { @table::STMG4Cuts.Mg27Capture  label : "Mg27 protonInelastic" process : "protonInelastic" doNotCut : true },
+  { type : creationLine  label : "844 decay photons (all 27Mg)"  pdgId : 22  process : "RadioactiveDecay"  model : ""
+    energies : [ 0.843746 ]  tolerance : 2.0e-4  doNotCut : true }
+]
 
 END_PROLOG

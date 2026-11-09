@@ -1,0 +1,17 @@
+# Watch-only job (nothing killed, same physics as BeamTo2VD.fcl) to size the 844 keV removal. At the end of the job
+# Mu2eG4Cuts prints, per labelled cut:
+#   - 27Mg nuclei created by all processes, by muon capture, neutronInelastic, nCapture and protonInelastic
+#     (all minus the named ones = anything else);
+#   - 843.746 keV photons from radioactive decay = what cutting every decay 844 photon (option 1) would remove.
+# Option 2 (STMG4Cuts.Mg27Capture) removes the "muon capture" 27Mg, i.e. about 0.718 x that many 844 photons.
+#include "Production/JobConfig/pileup/STM/BeamTo2VD.fcl"
+
+process_name: BeamTo2VDMg27Report
+
+physics.producers.g4run.Mu2eG4StackingOnlyCut : {
+  type : union
+  pars : [ @local::physics.producers.g4run.Mu2eG4StackingOnlyCut, @sequence::STMG4CutsMg27Report ]
+}
+
+outputs.compressedOutput101.fileName : "dts.owner.BeamTo2VDMg27Report_VD101.version.sequencer.art"
+outputs.compressedOutput116.fileName : "dts.owner.BeamTo2VDMg27Report_VD116.version.sequencer.art"

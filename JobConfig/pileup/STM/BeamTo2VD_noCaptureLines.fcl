@@ -1,0 +1,16 @@
+# BeamTo2VD.fcl with both Geant4 muon-capture lines that have dedicated sources removed at creation:
+#   - STMG4Cuts.AlXRay      : the Geant4 muonic Al 2p-1s X-ray (334.673 keV), replaced by TargetStops347
+#   - STMG4Cuts.Mg27Capture : 27Mg nuclei made by muon capture, so no 27Mg decay 844 keV line (TargetStops844)
+# BeamTo2VD.fcl (nothing removed) and BeamTo2VD_noG4AlXRay.fcl (X-ray only) are unchanged, for comparison.
+# Each cut prints its count at the end of the job.
+#include "Production/JobConfig/pileup/STM/BeamTo2VD.fcl"
+
+process_name: BeamTo2VDnoCaptureLines
+
+physics.producers.g4run.Mu2eG4StackingOnlyCut : {
+  type : union
+  pars : [ @local::physics.producers.g4run.Mu2eG4StackingOnlyCut, @local::STMG4Cuts.AlXRay, @local::STMG4Cuts.Mg27Capture ]
+}
+
+outputs.compressedOutput101.fileName : "dts.owner.BeamTo2VDnoCaptureLines_VD101.version.sequencer.art"
+outputs.compressedOutput116.fileName : "dts.owner.BeamTo2VDnoCaptureLines_VD116.version.sequencer.art"
