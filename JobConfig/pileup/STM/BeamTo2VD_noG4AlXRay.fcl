@@ -1,0 +1,18 @@
+# BeamTo2VD.fcl with the Geant4 muonic Al 2p-1s X-ray (~334.7 keV, G4EmCaptureCascade) killed at stacking,
+# for the beam (MuBeam) samples used with the dedicated TargetStops347 source, which supplies this line at
+# the real energy (346.828 keV). Everything else is unchanged: BeamTo2VD.fcl is the "before" job, and
+# BeamTo2VD_G4AlXRayReport.fcl runs the same physics as BeamTo2VD.fcl and only reports what this job kills.
+# Cut definition: STMG4Cuts.AlXRay in Production/JobConfig/pileup/STM/prolog.fcl. The kill count and the
+# creation spectrum around the line are printed by Mu2eG4Cuts at the end of the job.
+#include "Production/JobConfig/pileup/STM/BeamTo2VD.fcl"
+
+process_name: BeamTo2VDnoG4AlXRay
+
+# Keep the existing stacking cut (neutrinos) and add the X-ray cut
+physics.producers.g4run.Mu2eG4StackingOnlyCut : {
+  type : union
+  pars : [ @local::physics.producers.g4run.Mu2eG4StackingOnlyCut, @local::STMG4Cuts.AlXRay ]
+}
+
+outputs.compressedOutput101.fileName : "dts.owner.BeamTo2VDnoG4AlXRay_VD101.version.sequencer.art"
+outputs.compressedOutput116.fileName : "dts.owner.BeamTo2VDnoG4AlXRay_VD116.version.sequencer.art"

@@ -162,4 +162,26 @@ STMPileup: {
 
 }
 
+# Geant4 stacking cuts for the STM beam samples (Offline Mu2eG4Cuts type creationLine).
+# AlXRay: the Geant4 muonic Al 2p-1s X-ray. G4EmCaptureCascade puts it at 334.673 keV instead of the
+# real 346.828 keV (n=2 -> 1: interpolated K-level 452.99 keV minus Bohr n=2 level with the mu-27Al reduced
+# mass; fixed value, no width or smearing, only Z and A enter), and the dedicated TargetStops347 source (BeamTo2VD347.fcl) replaces it. Selected by
+# creator process + model (muon atomic cascade only, not the nuclear-capture gammas) and the creation
+# energy, which is exact at stacking, so the window holds the whole line. Killing at stacking also removes
+# its scattered (Compton) photons. The energy and tolerance must be confirmed from the doNotCut report
+# (BeamTo2VD_G4AlXRayReport.fcl) before production; tighten the tolerance once the exact energy is known.
+STMG4Cuts: {
+  AlXRay : {
+    type           : creationLine
+    pdgId          : 22
+    process        : "muMinusCaptureAtRest"
+    model          : "EMCascade"
+    energies       : [ 0.334673 ] # MeV
+    tolerance      : 2.0e-4      # MeV
+    doNotCut       : false
+    reportRange    : [ 0.300, 0.370 ] # MeV
+    reportMinCount : 5
+  }
+}
+
 END_PROLOG

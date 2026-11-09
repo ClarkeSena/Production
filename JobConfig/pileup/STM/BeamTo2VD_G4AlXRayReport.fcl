@@ -1,0 +1,20 @@
+# Diagnostic twin of BeamTo2VD_noG4AlXRay.fcl: the X-ray cut runs with doNotCut, so nothing is killed and the
+# physics is the same as BeamTo2VD.fcl (the cut uses no random numbers). At the end of the job Mu2eG4Cuts
+# prints how many photons WOULD be killed and every photon creation energy between 300 and 370 keV in 1 eV
+# bins per (creator process, model), printing bins with >= 5 entries (the summary lines use all bins).
+# Check before using the cut in production:
+#   - one energy bin of selected photons inside the window (the line), at the value in STMG4Cuts.AlXRay;
+#   - "NOT matching process/model" inside the window = 0 (unique: nothing else is created there);
+#   - no muMinusCaptureAtRest / EMCascade bins just outside the window (inclusive: the whole line is in it).
+#include "Production/JobConfig/pileup/STM/BeamTo2VD.fcl"
+
+process_name: BeamTo2VDG4AlXRayReport
+
+physics.producers.g4run.Mu2eG4StackingOnlyCut : {
+  type : union
+  pars : [ @local::physics.producers.g4run.Mu2eG4StackingOnlyCut, @local::STMG4Cuts.AlXRay ]
+}
+physics.producers.g4run.Mu2eG4StackingOnlyCut.pars[1].doNotCut : true
+
+outputs.compressedOutput101.fileName : "dts.owner.BeamTo2VDG4AlXRayReport_VD101.version.sequencer.art"
+outputs.compressedOutput116.fileName : "dts.owner.BeamTo2VDG4AlXRayReport_VD116.version.sequencer.art"
