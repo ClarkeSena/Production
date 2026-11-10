@@ -1,4 +1,5 @@
-# Generate and propagate 843.8 keV gammas (27Al(mu-,nu)27Mg, then 27Mg beta decay to 27Al*) from
+# Generate and propagate 843.8 keV gammas, and since 2026-11-10 also the 1014.5 keV line from the same decay (see the
+# second captureProducts entry), (27Al(mu-,nu)27Mg, then 27Mg beta decay to 27Al*) from
 # muon target stops to VD101 and VD116 for STM studies. Same chain as BeamTo2VD1809.fcl
 # (TargetStopsCat -> Pileup -> G4 from the photon), only the generated line differs.
 #
@@ -36,6 +37,22 @@ physics.producers.generate.captureProducts : [{
   tool_type  : MuStopGammaLineGenerator
   energy     : 0.84376 # MeV
   intensity  : 0.0711  # per capture
+  lifetime   : 8.187e11 # ns, 27Mg mean life (t1/2 / ln2)
+  foldPeriod : 1695.   # ns, micropulse
+},
+# ADDED 2026-11-10: the 1014.52 keV line from the SAME 27Mg decay (27Al 3/2+ level at 1014.56 keV, fed in 29.06% of
+# decays). Needed because the beam samples (BeamTo2VD_noCaptureLines.fcl) kill capture-made 27Mg in Geant4, which
+# removes this line as well as the 844. Not an STM normalisation line (same 27Mg yield as 844, ~2.5x weaker), but a
+# real peak in the spectrum. Same lifetime and folding as the 844 entry above.
+#   Intensity per capture = P(27Mg | capture) x I_gamma(1014.52 keV) = 0.0990 x 0.2820(20) = 0.0279
+#   I_gamma 28.20%, E 1014.52(10) keV: ENSDF, Basunia, NDS 112, 1875 (2011) (NuDat3 27Mg B- decay)
+# The lines are drawn independently, so a capture can (rarely, ~0.2%) give both; the real decay gives one or the
+# other. Not included: the 170.82 keV 1014->844 cascade gamma (0.86% per decay, ~0.00085 per capture).
+# Samples produced before this date (e.g. the s6 run 1212 / MDC2025sc TargetStops844) contain the 844 line ONLY.
+{
+  tool_type  : MuStopGammaLineGenerator
+  energy     : 1.01452 # MeV
+  intensity  : 0.0279  # per capture
   lifetime   : 8.187e11 # ns, 27Mg mean life (t1/2 / ln2)
   foldPeriod : 1695.   # ns, micropulse
 }]
