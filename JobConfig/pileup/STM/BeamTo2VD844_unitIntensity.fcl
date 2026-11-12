@@ -1,6 +1,7 @@
 # Unit-intensity version of BeamTo2VD844.fcl for training-sample production: an 843.76 keV photon
-# on EVERY muon capture instead of 0.0711 per capture. Same physics otherwise (energy, folded
-# 27Mg delay, geometry); only the rate per capture is changed, so the VD116 distribution is
+# on EVERY muon capture instead of 0.0711 per capture. Same physics otherwise (energy, 27Mg delay
+# with the total emission time folded into [0, 1695) ns, geometry); only the rate per capture is
+# changed, so the VD116 distribution is
 # unchanged and the sample has 1/0.0711 = 14x more photons per event. The saturated-activity
 # limitation documented in BeamTo2VD844.fcl applies unchanged.
 #

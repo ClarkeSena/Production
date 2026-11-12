@@ -4,12 +4,20 @@
 # (TargetStopsCat -> Pileup -> G4 from the photon), only the generated line differs.
 #
 # Follows capture, so it stays in captureProducts and the intensity is per CAPTURE. The 27Mg
-# lifetime (t1/2 = 9.458 min, tau = 818.7 s) is far longer than the 1695 ns micropulse, so the delay
-# is folded into one micropulse: the photon then arrives at a uniform time, i.e. a constant rate
-# uncorrelated with the bunch, instead of at t ~ 1e11 ns.
+# lifetime (t1/2 = 9.458 min, tau = 818.7 s) is far longer than the 1695 ns micropulse, so the
+# TOTAL emission time (muon stop time + capture time + 27Mg decay delay) is folded into
+# [0, 1695) ns: the photon then arrives at a uniform time within the micropulse, i.e. a constant
+# rate uncorrelated with the bunch, instead of at t ~ 1e11 ns. (Before 2026-11-11 only the delay
+# was folded, so times ran past 1695 ns by the stop + capture time: median 1841 ns, tail to 12 us.)
 #
 # Intensity per capture = P(27Mg | capture) x I_gamma(843.76 keV) = 0.0990(33) x 0.718(3) = 0.0711(24)
-#   P(27Mg | capture): RAL activation, arXiv:2506.08301 (NIM B 2025) and arXiv:2507.19753
+#   P(27Mg | capture) = 9.90(33)%: in-beam activation (beta-delayed gammas, Ge) at the RIKEN-RAL
+#     beamline (ISIS), Mizuno et al., arXiv:2507.19753. (arXiv:2506.08301, Yamaguchi et al.,
+#     NIM B 567 (2025) 165801, J-PARC MLF, uses 9.9% as its muon-count reference, so it is not
+#     an independent measurement.)
+#   Alternatives, not used: Measday et al., PRC 76 035504 (2007): 27Mg observed 10(1)%, "total"
+#     13(1)% per capture. A Mu2e thesis value of 9.2% 844 keV photons per capture is 13% x 0.718,
+#     ~30% above the activation result. Geant4 Bertini gives ~0.33 27Mg per capture (~3.4x high).
 #   I_gamma, t1/2 = 9.458(12) min: NNDC/ENSDF 27Mg decay (cf. Shibata et al., ARI 49 (1998) 985)
 # Per stop this is 0.043, vs 0.040 (unsourced) in Offline StoppedMuonXRayGammaRayGun.
 #

@@ -49,6 +49,13 @@ STMPileup: {
       # once their models are trained, append one entry per source to hitSummaryFiles, potsPerFile
       # and resamplerSourceRootFiles (src8 = 00000004 / 00000005), add the models to the catalog,
       # and remove the same lines from the MuBeam training sample so they are not counted twice.
+      # potsPerFile for these (unit-intensity samples): events x 1296.75 POT/stop / I, events = TargetStopsCat
+      # MDC2025ac stops resampled (one stop per event; 1296.75 = 4e9 x 1e8/213816 / (1442670 x 1000), ab chain):
+      #   TargetStops347 (s6_u347, MDC2025sc): 1.000e9 x 1296.75 / 0.798  = 1.625e12  (I = 0.798 per stop)
+      #   TargetStops844 (s7_u844, MDC2025sd, 844+1014 keV): 5.000e8 x 1296.75 / 0.0711 = 9.119e12 (I = 0.0711 per
+      #     capture; the unit fcl has 844 at 1.0 and 1014 at 0.0279/0.0711 = 0.3924, so one divisor serves both lines;
+      #     the capture fraction is applied inside Pileup in both the unit and the physical fcl, so it cancels).
+      #   Use the events actually processed in the catalogued files (log PileupPath116 totals), not the nominal count.
       # useSummaryFile : [true, true, true, true] # optional, default to all true, if false, the corresponding hitSummaryFiles entry will be skipped
       useHeun : true
       useSDE : true
